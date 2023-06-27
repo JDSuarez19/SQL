@@ -1,0 +1,29 @@
+--Created new tabl for electronics store "Star Tech"
+CREATE TABLE star_tech (id INTEGER PRIMARY KEY, product TEXT, units INTEGER, price INTEGER, color TEXT);
+
+--Input values into table
+INSERT INTO star_tech VALUES (1, "Laptop", 34, 849.99, "Black");
+INSERT INTO star_tech VALUES (2, "Smartphone", 18, 549.99, "Silver");
+INSERT INTO star_tech VALUES (3, "USB Cord", 57, 7.99, "Assortment");
+INSERT INTO star_tech VALUES (4, "USB-C Cord", 24, 13.99, "Assortment");
+INSERT INTO star_tech VALUES (5, "Bluetooth Speaker", 27, 49.99, "Blue");
+INSERT INTO star_tech VALUES (6, "Smartwatch", 56, 239.99, "Assortment");
+INSERT INTO star_tech VALUES (7, "Smartphone Case", 34, 25.99, "Clear");
+INSERT INTO star_tech VALUES (8, "Printer", 6, 149.99, "White");
+INSERT INTO star_tech VALUES (9, "PS5 Special Edition", 12, 599.99, "Black");
+INSERT INTO star_tech VALUES (10, "X-Box Special Edition", 27, 599.99, "Green");
+INSERT INTO star_tech VALUES (11, "Console Game", 108, 59.99, "N/A");
+INSERT INTO star_tech VALUES (12, "OLED TV", 22, 1599.99, "Black");
+INSERT INTO star_tech VALUES (13, "Computer Monitor",16, 469.99, "Assortment");
+INSERT INTO star_tech VALUES (14, "Phone Charger", 54, 12.99, "Red");
+INSERT INTO star_tech VALUES (15, "Keyboard", 23, 59.99, "Gray");
+
+--Display complete table
+SELECT * FROM star_tech;
+
+--Display average price for products where id is even
+SELECT AVG(price) AS average_price FROM star_tech WHERE id % 2 = 0;
+
+--Display product and its price for 5 most expensive items
+SELECT product, price FROM star_tech ORDER BY price DESC LIMIT 5;
+
