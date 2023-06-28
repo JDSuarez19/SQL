@@ -46,3 +46,10 @@ ON c.order_id = fs.orderID
 WHERE quantity > 2
 AND length(order_id) = 6
 AND order_id <> "Order ID";
+
+--List all the products sold in Los Angeles in February, and include how many of each were sold.
+SELECT product AS Product, 
+    Sum(quantity) AS Qty
+FROM Chaze_BIT_DB.FebSales
+WHERE location LIKE "%Los Angeles%"
+GROUP BY product;
