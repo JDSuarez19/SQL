@@ -1,0 +1,48 @@
+#In this SQL, I'm querying a database with multiple tables in it to quantify statistics about customer and order data. 
+
+--How many orders were placed in January?
+SELECT COUNT(orderID) FROM Chaze_BIT_DB.JanSales
+WHERE length(orderID) = 6
+AND orderID <> "Order ID";
+
+--How many of those orders were for an iPhone?
+SELECT COUNT(orderID) FROM Chaze_BIT_DB.JanSales
+WHERE length(orderID) = 6
+AND orderID <> "Order ID"
+AND Product = "iPhone";
+
+--Select the customer account numbers for all the orders that were placed in February.
+SELECT DISTINCT c.acctnum
+FROM Chaze_BIT_DB.customers c
+JOIN Chaze_BIT_DB.FebSales fs
+ON c.order_id = fs.orderID
+WHERE length(order_id) = 6
+AND order_id <> "Order ID";
+
+--Which product was the cheapest one sold in January, and what was the price?
+SELECT Product, price FROM Chaze_BIT_DB.JanSales
+ORDER BY price
+LIMIT 1;
+
+--What is the total revenue for each product sold in January?
+SELECT Product,
+    SUM(quantity) * price AS revenue
+FROM Chaze_BIT_DB.JanSales
+GROUP BY Product;
+
+--Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue?
+SELECT DISTINCT Product,
+    SUM(Quantity),
+    SUM(Quantity) * price AS Revenue
+FROM Chaze_BIT_DB.FebSales
+WHERE location LIKE "548 Lincoln St,%";
+
+--How many customers ordered more than 2 products at a time, and what was the average amount spent for those customers?
+SELECT DISTINCT(COUNT(acctnum)) AS Acctnum,
+    AVG(price*quantity) AS Average
+FROM Chaze_BIT_DB.customers c
+JOIN Chaze_BIT_DB.FebSales fs
+ON c.order_id = fs.orderID
+WHERE quantity > 2
+AND length(order_id) = 6
+AND order_id <> "Order ID";
