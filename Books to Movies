@@ -1,0 +1,56 @@
+--Create table of some books
+CREATE TABLE books (
+    id INTEGER,
+    author TEXT,
+    title TEXT,
+    release INTEGER);
+
+--Insert data into those tables
+INSERT INTO books VALUES (1,"Stephen King", "IT", 1986);
+INSERT INTO books VALUES (2, "Ken Kesey", "One FLew Over The Cuckoo's Nest", 1963);
+INSERT INTO books VALUES (3, "Michael Crichton", "Jurassic Park", 1990);
+INSERT INTO books VALUES (4, "Frank Herbert", "Dune", 1965);
+INSERT INTO books VALUES (5, "Stephen King", "The Shining", 1977);
+
+--Create a table of movies based on those books
+CREATE TABLE movies (
+    id INTEGER,
+    title TEXT,
+    release INTEGER,
+    director TEXT);
+
+--Insert data into the table
+INSERT INTO movies VALUES (1, "IT", 2017, "Ansy Muschietti");
+INSERT INTO movies VALUES (2, "One Flew Over The Cuckoo's Nest", 1975, "Milos Forman");
+INSERT INTO movies VALUES (3, "Jurassic Park", 1994, "Steven Spielberg");
+INSERT INTO movies VALUES (4, "Dune", 2021, "Denis Villeneuve");
+INSERT INTO movies VALUES (5, "The Shining", 1980, "Stanley Kubrick");
+
+Create a table of stars of those movies
+CREATE TABLE stars (
+    id INTEGER,
+    movie TEXT,
+    actor TEXT);
+    
+--Insert data into the table
+INSERT INTO stars VALUES (1, "IT", "James McAvoy");
+INSERT INTO stars VALUES (2, "One Flew Over The Cuckoo's Nest", "Jack Nicholson");
+INSERT INTO stars VALUES (3, "Jurassic Park", "Sam Neil");
+INSERT INTO stars VALUES (4, "Dune", "Timothee Chalamet");
+INSERT INTO stars Values (5, "The Shining", "Jack Nicholson");
+
+--Return book title, year of release, and year of movie adaptation
+SELECT b.title, b.release AS "book release", m.release AS "movie release"
+FROM books b
+JOIN movies m
+ON b.id = m.id
+ORDER BY "movie release";
+
+--Return movie title, year of book release, name of the author of the book, year of movie release, director of the movie, and star of the movie
+SELECT m.title, b.release AS "book release", b.author, m.release AS "movie release", m.director, stars.actor AS starring
+FROM movies m
+JOIN books b
+ON b.id = m.id
+JOIN stars
+ON stars.id = b.id
+ORDER BY "book release";
