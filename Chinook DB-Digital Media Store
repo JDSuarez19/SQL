@@ -1,0 +1,155 @@
+/* Here are queries based on a database called chinook. 
+It represents a digital media store and includes tables for artists, 
+albums, media tracks, invoices, and customers.*/
+
+--List each customer, and support rep to help each customer.
+SELECT c.CustomerID,
+    c.FirstName||" "||c.LastName AS Customer,
+    e.EmployeeID,
+    e.FirstName||" "||e.LastName AS [Employee To Help]
+FROM customers c
+JOIN employees e
+ON c.SupportRepID = e.EmployeeId
+GROUP BY c.CustomerID;
+
+--List the number of tracks in each playlist ID.
+SELECT Count( pt.trackID) AS [Number of tracks],
+    pt.playlistID,
+    p.name
+FROM playlist_track pt
+JOIN playlists p
+ON pt.playlistid = p.playlistid
+GROUP BY pt.playlistid;
+
+--List the invoice and cutomer IDs, the customer, and amount spent for each order.
+SELECT i.invoiceID,
+    c.customerID,
+    c.FirstName||" "||c.LastName AS Customer,
+    COUNT(i.InvoiceID) AS [Number of Tracks],
+    "$"||ROUND(SUM(ii.UnitPrice * ii.Quantity), 2) AS [Amount Spent]
+FROM customers c
+JOIN invoices i
+ON c.customerid = i.customerid
+JOIN invoice_items ii
+ON i.invoiceid = ii.invoiceid
+GROUP BY i.invoiceid;
+
+--How many orders has each customer made, and how much money has each customer spent?
+SELECT COUNT(DISTINCT i.invoiceID) AS [Number of Invoices],
+    c.customerID,
+    c.FirstName||" "||c.LastName AS Customer,
+    COUNT(i.InvoiceID) AS [Total Downloads],
+    "$"||ROUND(SUM(ii.UnitPrice * ii.Quantity), 2) AS [Amount Spent]
+FROM customers c
+JOIN invoices i
+ON c.customerid = i.customerid
+JOIN invoice_items ii
+ON i.invoiceid = ii.invoiceid
+GROUP BY c.customerid;
+
+--What are the 25 most popular artists according to purchases?
+SELECT a.artistid AS Artist_ID,
+    a.name AS Artist_Name,
+    COUNT(a.artistID) AS Number_of_Downloads
+FROM artists a
+JOIN albums al
+ON a.artistID = al.artistID
+JOIN tracks t
+ON al.albumID = t.albumID
+JOIN invoice_items ii
+ON t.trackID = ii.trackID
+GROUP BY a.name
+ORDER BY Number_of_Downloads DESC
+LIMIT 25;
+
+--What are the 10 most popular genres according to purchases?
+SELECT  g.genreID,
+    g.name AS Genre_Name,
+    COUNT(ii.invoiceID) AS Number_of_Downloads
+FROM genres g
+JOIN tracks t
+ON g.genreID = t.genreID
+JOIN invoice_items ii
+ON t.trackID = ii.trackID
+GROUP BY g.name
+ORDER BY Number_of_Downloads DESC
+LIMIT 10;
+
+--What was the average that each customer spent?
+SELECT i.CustomerID,
+    c.FirstName,
+    c.LastName,
+    "$"||ROUND(AVG(i.total), 2) AS [Average $ Per Order]
+FROM customers c
+JOIN invoices i
+ON c.customerID = i.customerID
+GROUP BY i.customerID;
+
+--List the sales reps in order of how much they made from most to least.
+SELECT e.employeeID AS Employee_ID,
+    e.FirstName||" "||e.LastName AS Sales_Rep,
+    "$"||ROUND(SUM(i.total), 2) AS Revenue
+FROM employees e
+JOIN customers c
+ON e.employeeID = c.supportrepID
+JOIN invoices i
+ON c.customerID = i.customerID
+GROUP BY e.employeeid
+ORDER BY Revenue DESC;
+
+--What is the average amount that each sales rep made per customer?
+WITH temptab AS (SELECT customerid,
+                    SUM(total) AS total
+                    FROM invoices
+                    GROUP BY customerid)
+                    
+SELECT e.employeeID AS Employee_ID,
+    e.FirstName||" "||e.LastName AS Sales_Rep,
+    "$"||ROUND(AVG(t.total), 2) AS Average_Per_Customer
+FROM employees e
+JOIN customers c
+ON e.employeeID = c.supportrepID
+JOIN temptab t
+ON c.customerid = t.customerid
+GROUP BY Employee_ID;
+
+--From which countries have customers spent the most money outside of the United States?
+SELECT * FROM invoices
+WHERE BillingCountry != "USA"
+    AND Total > 10
+ORDER BY Total DESC;
+
+--How many invoices are there per year?
+SELECT COUNT(InvoiceID) AS Invoices,
+CASE
+    WHEN InvoiceDate LIKE "2009%" THEN "2009"
+    WHEN InvoiceDate LIKE "2010%" THEN "2010"
+    WHEN InvoiceDate LIKE "2011%" THEN "2011"
+    WHEN InvoiceDate LIKE "2012%" THEN "2012"
+    WHEN InvoiceDate LIKE "2013%" THEN "2013"
+END AS Year
+FROM invoices
+GROUP BY Year;
+
+--What is the most purchased media type?
+SELECT m.mediatypeid,
+    m.name,
+    COUNT(ii.invoiceid) AS Invoices
+FROM media_types m
+JOIN tracks t
+ON m.mediatypeid = t.mediatypeid
+JOIN invoice_items ii
+ON t.trackid = ii.trackid
+GROUP BY m.mediatypeid
+ORDER BY Invoices DESC
+LIMIT 1;
+
+--List each track, which artist/s performs it, and which album it is on.
+SELECT a.name AS Artist,
+    t.name AS Track,
+    al.title AS Album
+FROM artists a
+JOIN albums al
+ON a.artistid = al.artistid
+JOIN tracks t
+ON al.albumid = t.albumid;
