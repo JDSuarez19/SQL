@@ -32,7 +32,9 @@ JOIN invoices i
 ON c.customerid = i.customerid
 JOIN invoice_items ii
 ON i.invoiceid = ii.invoiceid
-GROUP BY i.invoiceid;
+GROUP BY i.invoiceid,
+    c.customerid,
+    Customer;
 
 --How many orders has each customer made, and how much money has each customer spent?
 SELECT COUNT(DISTINCT i.invoiceID) AS [Number of Invoices],
