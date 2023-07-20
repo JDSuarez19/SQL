@@ -10,13 +10,14 @@ INSERT INTO star_tech VALUES (5, "Bluetooth Speaker", 27, 49.99, "Blue");
 INSERT INTO star_tech VALUES (6, "Smartwatch", 56, 239.99, "Assortment");
 INSERT INTO star_tech VALUES (7, "Smartphone Case", 34, 25.99, "Clear");
 INSERT INTO star_tech VALUES (8, "Printer", 6, 149.99, "White");
-INSERT INTO star_tech VALUES (9, "PS5 Special Edition", 12, 599.99, "Black");
-INSERT INTO star_tech VALUES (10, "X-Box Special Edition", 27, 599.99, "Green");
+INSERT INTO star_tech VALUES (9, "PS5 Special Edition Console", 12, 599.99, "Black");
+INSERT INTO star_tech VALUES (10, "X-Box Special Edition Console", 27, 599.99, "Green");
 INSERT INTO star_tech VALUES (11, "Console Game", 108, 59.99, "N/A");
 INSERT INTO star_tech VALUES (12, "OLED TV", 22, 1599.99, "Black");
 INSERT INTO star_tech VALUES (13, "Computer Monitor",16, 469.99, "Assortment");
 INSERT INTO star_tech VALUES (14, "Phone Charger", 54, 12.99, "Red");
-INSERT INTO star_tech VALUES (15, "Keyboard", 23, 59.99, "Gray");
+INSERT INTO star_tech VALUES (15, "Keyboard", 23, 59.99, "Gray")
+INSERT INTO star_tech VALUES (16, "Nintendo Switch Console, 19, 299.99, "Blue");
 
 --Display complete table
 SELECT * FROM star_tech;
@@ -26,4 +27,11 @@ SELECT AVG(price) AS average_price FROM star_tech WHERE id % 2 = 0;
 
 --Display product and its price for 5 most expensive items
 SELECT product, price FROM star_tech ORDER BY price DESC LIMIT 5;
+
+--How many items in the store are black?
+SELECT SUM(units) AS [Total Black Items]
+FROM star_tech
+WHERE color = "Black";
+
+
 
