@@ -1,0 +1,27 @@
+--Order items by catogory and price.
+SELECT *
+FROM superstore
+ORDER BY category, price;
+
+--Order items by price.
+SELECT item_name, price
+FROM superstore
+ORDER BY price;
+
+--Show a statistic about item prices.
+--Average price of each category.
+SELECT category, ROUND(AVG(price),2) AS average_price
+FROM superstore
+GROUP BY category;
+
+--Show a statistic about the price for items in the category of "Kitchen Supplies"
+--Most expensive price in Kitchen Supplies.
+SELECT category, MAX(price) AS "Highest Price"
+FROM superstore
+WHERE category = "Kitchen Supplies";
+
+--Total stock quantity for each category.
+SELECT category, SUM(stock_quantity) AS "Stock Quantity"
+FROM superstore
+GROUP BY category
+ORDER BY "Stock Quantity" DESC;
