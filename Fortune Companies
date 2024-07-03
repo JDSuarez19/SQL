@@ -1,0 +1,33 @@
+--This is using a database with fictional Fortune company data.
+SELECT *
+FROM fortune_companies;
+
+--Group data using CASE statement.
+SELECT company_name,
+maternity_leave_weeks,
+CASE WHEN maternity_leave_weeks >= 14 THEN "Very Mother Friendly"
+WHEN maternity_leave_weeks >=11 THEN "Mother Friendly"
+WHEN maternity_leave_weeks >=8 THEN "Somewhat Mother Freindly"
+ELSE "Not Mother Friendly"
+END AS "Mother Freindliness"
+FROM fortune_companies
+ORDER BY maternity_leave_weeks DESC;
+
+--Use HAVING to determine something about data per category.
+--Get total revenue for industries that are listed more than 5 times.
+SELECT industry,
+SUM(revenue) AS total_rev
+FROM fortune_companies
+GROUP BY industry
+HAVING COUNT(industry) > 5
+ORDER BY total_rev DESC;
+
+--Use logical operators AND or OR to filter data.
+--Find desirable places to work by filtering an average tenure of over 6 or
+--more than 19 days off and healthcare benefits. Sort by tenure.
+SELECT *
+FROM fortune_companies
+WHERE avg_employee_tenure > 6
+OR paid_time_off_days > 19
+AND healthcare_benefits = true
+ORDER BY avg_employee_tenure;
